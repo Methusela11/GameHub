@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>GameHub — {{ game.title }}</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="{% static 'css/style.css' %}"></head>
+<body><header class="topbar"><div class="container"><div class="brand">GameHub</div></div></header>
+<main class="container detail-wrap">
+  <div class="detail-left">{% if game.cover_image %}<img src="{{ game.cover_image.url }}" alt="{{ game.title }}">{% endif %}</div>
+  <div class="detail-right">
+    <h1>{{ game.title }}</h1>
+    <p class="meta">{% if game.category %}{{ game.category.name }}{% endif %} · Version {{ game.version }}</p>
+    <p>{{ game.description }}</p>
+    <div class="actions">
+      {% if game.file %}<a class="btn primary" href="{{ game.file.url }}">Download</a>{% elif game.external_link %}<a class="btn primary" href="{{ game.external_link }}" target="_blank">Download</a>{% endif %}
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container">© GameHub</div></footer></body></html>

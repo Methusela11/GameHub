@@ -1,0 +1,80 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GameHub — Home</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="topbar">
+  <div class="container">
+    <div class="brand">GameHub</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/games/">Games</a>
+      <a href="/contact/">Contact</a>
+      <a href="/dashboard/">Dashboard</a>
+    </nav>
+    <div class="search">
+      <form method="get" action="/">
+        <input name="q" placeholder="Search games..." value="{{ q|default:'' }}"/>
+      </form>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>All Games</h1>
+    <p class="subtitle">Browse games, read changelogs and download the games versions.</p>
+    <div class="filters">
+      <a href="/?category=all" class="chip {% if selected == 'all' %} active{% endif %}">All</a>
+      {% for c in categories %}
+        <a href="/?category={{ c.slug }}" class="chip {% if selected == c.slug %} active{% endif %}">{{ c.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<main class="container grid-wrap">
+  {% for game in games %}
+  <article class="card">
+    <div class="card-media">
+      {% if game.cover_image %}
+        <img src="{{ game.cover_image.url }}" alt="{{ game.title }}">
+      {% else %}
+        <div class="placeholder">No image</div>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <div class="meta">{% if game.category %}{{ game.category.name }}{% endif %}</div>
+      <h3 class="title">{{ game.title }}</h3>
+      <p class="excerpt">{{ game.description|truncatechars:120 }}</p>
+      <div class="card-footer">
+        <div class="price">{{ game.price|default:"Free" }}</div>
+        <div class="actions">
+          <a class="btn" href="{{ game.get_absolute_url }}">View</a>
+          {% if game.file %}
+            <a class="btn primary" href="{{ game.file.url }}">Download</a>
+          {% elif game.external_link %}
+            <a class="btn primary" href="{{ game.external_link }}" target="_blank">Download</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </article>
+  {% empty %}
+    <p>No games yet. Add categories & games in the admin.</p>
+  {% endfor %}
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>© GameHub</div>
+    <div class="social">Follow: —</div>
+  </div>
+</footer>
+</body>
+</html>
